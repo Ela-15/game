@@ -88,8 +88,16 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     if (socket.roomCode && rooms[socket.roomCode]) {
+      const room = rooms[socket.roomCode];
+      room.players = room.players.filter(id => id !== socket.id);
       socket.to(socket.roomCode).emit('partnerLeft');
-      delete rooms[socket.roomCode];
+
+      console.log(`🐻 Player left room ${socket.roomCode}. Remaining: ${room.players.length}`);
+
+      if (room.players.length === 0) {
+        delete rooms[socket.roomCode];
+        console.log(`🗑️ Room ${socket.roomCode} deleted (empty)`);
+      }
     }
     console.log('Disconnected:', socket.id);
   });
