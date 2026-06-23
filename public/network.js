@@ -3,10 +3,7 @@
 //  NETWORK — Socket.io client layer for Dudu & Bubu
 // ═══════════════════════════════════════════════════════════════
 
-const socket = io({
-  transports: ['websocket'],
-  upgrade: false
-});
+const socket = io();
 
 // ── Lobby UI ───────────────────────────────────────────────────
 document.getElementById('btn-create').addEventListener('click', () => {
