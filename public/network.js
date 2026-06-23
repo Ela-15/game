@@ -3,7 +3,10 @@
 //  NETWORK — Socket.io client layer for Dudu & Bubu
 // ═══════════════════════════════════════════════════════════════
 
-const socket = io();
+const socket = io({
+  transports: ['websocket'],
+  upgrade: false
+});
 
 // ── Lobby UI ───────────────────────────────────────────────────
 document.getElementById('btn-create').addEventListener('click', () => {
@@ -16,6 +19,8 @@ document.getElementById('btn-join').addEventListener('click', () => {
     showError('Please enter a valid 4-letter room code!');
     return;
   }
+  document.getElementById('btn-join').disabled = true;
+  document.getElementById('btn-join').textContent = 'Joining...';
   socket.emit('joinRoom', code);
 });
 
@@ -49,6 +54,8 @@ socket.on('roomJoined', ({ code, playerIndex }) => {
 });
 
 socket.on('joinError', (msg) => {
+  document.getElementById('btn-join').disabled = false;
+  document.getElementById('btn-join').textContent = 'Join Room';
   showError(msg);
 });
 
@@ -91,7 +98,7 @@ socket.on('disconnect', () => {
 let _myPlayerIndex = 0;
 
 socket.on('roomCreated', ({ playerIndex }) => { _myPlayerIndex = playerIndex; });
-socket.on('roomJoined',  ({ playerIndex }) => { _myPlayerIndex = playerIndex; });
+socket.on('roomJoined', ({ playerIndex }) => { _myPlayerIndex = playerIndex; });
 
 // ── Send helpers (called by game.js) ───────────────────────────
 
