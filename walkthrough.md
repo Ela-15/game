@@ -10,13 +10,13 @@ The server is live at:
 
 ## 🎮 How to Start Playing
 
-### Step 1 — Player 1 (Dudu 🐻 Brown Bear)
+### Step 1 — Player 1 (Bubu 🐻 Brown Bear)
 1. Open **http://localhost:3000** in your browser
 2. Click **"Create Room"**
-3. You'll see a **4-letter room code** (e.g. `AB3X`)
+3. You'll see a **4-letter room code** (e.g. `PL2L`)
 4. Share that code with Player 2!
 
-### Step 2 — Player 2 (Bubu 🐻 White Bear)
+### Step 2 — Player 2 (Dudu 🐼 Panda)
 1. Open the **LAN URL** in your browser: `http://192.168.56.1:3000`
    - Or open `http://localhost:3000` on the **same laptop** to test
 2. Type the room code and click **"Join Room"**
@@ -28,20 +28,35 @@ The server is live at:
 
 | Player | Character | Move | Jump |
 |--------|-----------|------|------|
-| **Player 1** | 🐻 Dudu (Brown) | `W A S D` | `W` or `Space` |
-| **Player 2** | 🐻 Bubu (White) | `← ↑ → ↓` | `↑` or `Enter` |
+| **Player 1** | 🐻 Bubu (Brown Bear) | `W A S D` | `W` or `Space` |
+| **Player 2** | 🐼 Dudu (Panda) | `← ↑ → ↓` | `↑` or `Enter` |
 
 ---
 
-## 🗺️ The 5 Levels
+## 🗺️ The 20 Levels
 
 | # | Level | Challenge |
 |---|-------|-----------|
 | 1 | 🌸 Sweet Meadow | Tutorial — 1 key, meet at heart portal |
 | 2 | 🍯 Honey Forest | Split up — each find a key, reunite |
 | 3 | 🌺 Blossom Bridge | **Pressure plate puzzle** — one holds button, other passes |
-| 4 | ☁️ Cloud Steps | Climb high clouds, grab 2 keys |
-| 5 | 💕 Summit of Hearts | Final challenge — 3 keys + pressure plate + big jumps |
+| 4 | 🤝 Stack Up! | **Stacking intro** — stand on partner's head to reach the key |
+| 5 | 🟢 Bounce Valley | Trampolines — bounce to high places |
+| 6 | ☁️ Cloud Steps | Climb high clouds, grab 2 keys |
+| 7 | 🧊 Ice Cave | Watch out! Slippery platforms and spike hazards |
+| 8 | 📦 Block Push | Push crates onto pressure plates |
+| 9 | 💀 Spike Valley | Gauntlet of dangerous spike hazards |
+| 10 | ⬅️ Conveyor Chaos | Belts push you — fight the conveyor speed |
+| 11 | 💥 Crumble Run | Falling platforms — step fast or fall |
+| 12 | ⛰️ The Great Divide | Moving platforms over a dangerous spike gap |
+| 13 | 🎪 Mixed Madness | Pressure plates, barriers, conveyors, spikes |
+| 14 | 🌙 Moonlit Ascent | Vertical climb to the top moonlit clouds |
+| 15 | 💕 Summit of Hearts | Heart Portal summit — 3 keys and moving platforms |
+| 16 | ❤️ Love Elevator | Take turns stepping on buttons to lift each other up |
+| 17 | 🌈 Rainbow Ridge | Ride moving conveyor belts in opposite directions |
+| 18 | 💞 Ice & Fire | Slide on slippery ice peaks to collect love notes |
+| 19 | 💖 Trust Leap | Jump across falling platforms and trampolines |
+| 20 | 💝 Eternal Love Portal | Grand Finale! Stacking and bouncing to reach the portal |
 
 ---
 

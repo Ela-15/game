@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
     rooms[code] = {
       code,
       players: [socket.id],
-      state: { level: 0, keys: [] }
+      state: { level: 0, keys: [], deaths: 0 }
     };
     socket.roomCode = code;
     socket.playerIndex = 0;
@@ -55,10 +55,9 @@ io.on('connection', (socket) => {
     socket.roomCode = code;
     socket.playerIndex = 1;
 
-    socket.join(code); // Ensure joined bits before emitting
+    socket.join(code);
     socket.emit('roomJoined', { code, playerIndex: 1 });
 
-    // Give a small delay to ensure client is ready for bothReady
     setTimeout(() => {
       io.to(code).emit('bothReady', { level: room.state.level });
       console.log(`[SERVER] 🤝 Player 2 (${socket.id}) joined room ${code}. Game starting!`);
@@ -90,6 +89,28 @@ io.on('connection', (socket) => {
   socket.on('plateState', (data) => {
     if (!socket.roomCode) return;
     socket.to(socket.roomCode).emit('plateSync', data);
+  });
+
+  // Push block position sync
+  socket.on('pushBlock', (data) => {
+    if (!socket.roomCode) return;
+    socket.to(socket.roomCode).emit('pushBlockSync', data);
+  });
+
+  // Falling platform state sync
+  socket.on('fallingPlatform', (data) => {
+    if (!socket.roomCode) return;
+    socket.to(socket.roomCode).emit('fallingPlatformSync', data);
+  });
+
+  // Death event sync
+  socket.on('playerDeath', () => {
+    if (!socket.roomCode) return;
+    const room = rooms[socket.roomCode];
+    if (room) {
+      room.state.deaths++;
+      io.to(socket.roomCode).emit('deathSync', { playerIndex: socket.playerIndex, totalDeaths: room.state.deaths });
+    }
   });
 
   socket.on('nextLevel', (lvIndex) => {

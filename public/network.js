@@ -24,7 +24,6 @@ document.getElementById('btn-join').addEventListener('click', () => {
   document.getElementById('btn-join').textContent = 'Joining...';
   socket.emit('joinRoom', code);
 
-  // Auto-reset if no response in 10s
   setTimeout(() => {
     if (document.getElementById('btn-join').disabled && document.getElementById('btn-join').textContent === 'Joining...') {
       document.getElementById('btn-join').disabled = false;
@@ -54,7 +53,6 @@ function showScene(name) {
   if (el) el.classList.add('active');
 }
 
-// Make showScene available globally for game3d.js
 window.showScene = showScene;
 
 // ── Socket Events ──────────────────────────────────────────────
@@ -128,17 +126,28 @@ socket.on('partnerLeft', () => {
   if (window.onPartnerLeft) window.onPartnerLeft();
 });
 
+socket.on('pushBlockSync', (data) => {
+  if (window.onRemotePushBlock) window.onRemotePushBlock(data);
+});
+
+socket.on('fallingPlatformSync', (data) => {
+  if (window.onRemoteFallingPlatform) window.onRemoteFallingPlatform(data);
+});
+
+socket.on('deathSync', (data) => {
+  if (window.onRemoteDeath) window.onRemoteDeath(data);
+});
+
 socket.on('disconnect', () => {
   console.warn('Disconnected from server');
 });
 
 // ── Send helpers (called by game3d.js) ───────────────────────────
 
-// Send local bear state every frame
 let _stateTick = 0;
 window.NET_state = (state) => {
   _stateTick++;
-  if (_stateTick % 2 !== 0) return; // Send every 2 frames (~30 Hz)
+  if (_stateTick % 2 !== 0) return;
   socket.emit('playerState', state);
 };
 
@@ -156,4 +165,16 @@ window.NET_coin = (id) => {
 
 window.NET_nextLevel = (lvIndex) => {
   socket.emit('nextLevel', lvIndex);
+};
+
+window.NET_pushBlock = (data) => {
+  socket.emit('pushBlock', data);
+};
+
+window.NET_fallingPlatform = (data) => {
+  socket.emit('fallingPlatform', data);
+};
+
+window.NET_death = () => {
+  socket.emit('playerDeath');
 };
