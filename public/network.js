@@ -59,13 +59,23 @@ socket.on('joinError', (msg) => {
   showError(msg);
 });
 
+let _pendingStart = null;
 socket.on('bothReady', ({ level }) => {
-  // Determine player index from socket data
-  // playerIndex is stored server-side on the socket; we know it from roomCreated/roomJoined
   const idx = _myPlayerIndex;
   const startLevel = level || 0;
-  if (window.onBothReady) window.onBothReady(idx, startLevel);
+  if (window.onBothReady) {
+    window.onBothReady(idx, startLevel);
+  } else {
+    _pendingStart = { idx, startLevel };
+  }
 });
+
+window.NET_reportReady = () => {
+  if (_pendingStart && window.onBothReady) {
+    window.onBothReady(_pendingStart.idx, _pendingStart.startLevel);
+    _pendingStart = null;
+  }
+};
 
 socket.on('remoteState', (state) => {
   if (window.onRemoteState) window.onRemoteState(state);

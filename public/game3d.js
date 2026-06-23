@@ -484,3 +484,5 @@ window.onLoadLevel = (idx) => {
 window.onRemoteState = (state) => {
     if (remoteBear) remoteBear.applyState(state);
 };
+
+if (window.NET_reportReady) window.NET_reportReady();
