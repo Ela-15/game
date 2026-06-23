@@ -7,6 +7,7 @@ const socket = io();
 
 // ── Lobby UI ───────────────────────────────────────────────────
 document.getElementById('btn-create').addEventListener('click', () => {
+  console.log('Attempting to create room...');
   socket.emit('createRoom');
 });
 
@@ -50,9 +51,10 @@ function showScene(name) {
 
 // ── Socket Events ──────────────────────────────────────────────
 socket.on('roomCreated', ({ code, playerIndex }) => {
+  _myPlayerIndex = playerIndex;
   document.getElementById('room-code-show').textContent = code;
   showScene('waiting');
-  console.log(`Room created: ${code}, you are Player ${playerIndex + 1} (Dudu 🐻 brown)`);
+  console.log(`Room created: ${code}, you are Player ${playerIndex + 1}`);
 });
 
 socket.on('roomJoined', ({ code, playerIndex }) => {
