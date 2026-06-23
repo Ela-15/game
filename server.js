@@ -104,17 +104,25 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, '0.0.0.0', () => {
-  const os = require('os');
-  const nets = os.networkInterfaces();
-  let lanIP = 'localhost';
-  for (const ifaces of Object.values(nets)) {
-    for (const iface of ifaces) {
-      if (iface.family === 'IPv4' && !iface.internal) { lanIP = iface.address; break; }
+
+// Export for Vercel
+module.exports = app;
+
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  server.listen(PORT, '0.0.0.0', () => {
+    const os = require('os');
+    const nets = os.networkInterfaces();
+    let lanIP = 'localhost';
+    for (const ifaces of Object.values(nets)) {
+      for (const iface of ifaces) {
+        if (iface.family === 'IPv4' && !iface.internal) { lanIP = iface.address; break; }
+      }
+      if (lanIP !== 'localhost') break;
     }
-    if (lanIP !== 'localhost') break;
-  }
-  console.log('\n🐻💕 Dudu & Bubu Adventure Server');
-  console.log(`✅ Local:  http://localhost:${PORT}`);
-  console.log(`🌐 LAN:   http://${lanIP}:${PORT}  ← Share this with Player 2!\n`);
-});
+    console.log('\n🐻💕 Dudu & Bubu Adventure Server');
+    console.log(`✅ Local:  http://localhost:${PORT}`);
+    console.log(`🌐 LAN:   http://${lanIP}:${PORT}  ← Share this with Player 2!\n`);
+  });
+} else {
+  console.log('🚀 Running in Serverless Mode (Vercel)');
+}
