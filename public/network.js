@@ -59,11 +59,12 @@ socket.on('joinError', (msg) => {
   showError(msg);
 });
 
-socket.on('bothReady', () => {
+socket.on('bothReady', ({ level }) => {
   // Determine player index from socket data
   // playerIndex is stored server-side on the socket; we know it from roomCreated/roomJoined
   const idx = _myPlayerIndex;
-  if (window.onBothReady) window.onBothReady(idx);
+  const startLevel = level || 0;
+  if (window.onBothReady) window.onBothReady(idx, startLevel);
 });
 
 socket.on('remoteState', (state) => {
@@ -76,6 +77,10 @@ socket.on('keySync', (id) => {
 
 socket.on('plateSync', (data) => {
   if (window.onRemotePlate) window.onRemotePlate(data);
+});
+
+socket.on('coinSync', (id) => {
+  if (window.onRemoteCoin) window.onRemoteCoin(id);
 });
 
 socket.on('loadLevel', (idx) => {
@@ -116,6 +121,10 @@ window.NET_key = (id) => {
 
 window.NET_plate = (data) => {
   socket.emit('plateState', data);
+};
+
+window.NET_coin = (id) => {
+  socket.emit('collectCoin', id);
 };
 
 window.NET_nextLevel = (lvIndex) => {

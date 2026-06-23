@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     socket.playerIndex = 1;
     socket.join(code);
     socket.emit('roomJoined', { code, playerIndex: 1 });
-    io.to(code).emit('bothReady');
+    io.to(code).emit('bothReady', { level: room.state.level });
     console.log(`Player 2 joined room ${code}`);
   });
 
@@ -60,6 +60,14 @@ io.on('connection', (socket) => {
     if (room && !room.state.keys.includes(id)) {
       room.state.keys.push(id);
       io.to(socket.roomCode).emit('keySync', id);
+    }
+  });
+
+  socket.on('collectCoin', (id) => {
+    if (!socket.roomCode) return;
+    const room = rooms[socket.roomCode];
+    if (room) {
+      io.to(socket.roomCode).emit('coinSync', id);
     }
   });
 

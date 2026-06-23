@@ -28,6 +28,8 @@ const GRAV = 0.55;
 const JUMP_VEL = -13.5;
 const WALK_SPD = 4.4;
 const EXIT_W = 68, EXIT_H = 76;
+const SPIKE_SZ = 32;
+const COIN_SZ = 22;
 
 // ── Level Definitions ──────────────────────────────────────────
 function buildLevels() {
@@ -121,10 +123,79 @@ function buildLevels() {
       keys: [{ id: 0, x: 158, y: 293 }, { id: 1, x: 368, y: 222 }, { id: 2, x: 518, y: 162 }],
       plates: [{ id: 0, x: 258, y: 396, w: 50, h: 13, doorId: 0 }],
       barriers: [{ id: 0, x: 470, y: 306, w: 22, h: 90 }],
-      exit: { x: 712, y: 364 },
+      exit: { x: 700, y: 422 },
       spawns: [{ x: 50, y: 454 }, { x: 100, y: 454 }],
       totalKeys: 3,
+      spikes: [], movingPlatforms: [], coins: []
     },
+    {
+      name: '💀 Spike Valley',
+      hint: 'Watch your step! Spikes are sharp! 🌵',
+      sky: ['#FF9E80', '#FF3D00'],
+      platforms: [{ x: 0, y: GY, w: CW, h: 50, isGround: true }, { x: 200, y: 420, w: 100, h: 16 }, { x: 400, y: 340, w: 100, h: 16 }, { x: 600, y: 420, w: 100, h: 16 }],
+      keys: [{ id: 0, x: 432, y: 310 }],
+      plates: [], barriers: [],
+      spikes: [
+        { x: 300, y: GY - SPIKE_SZ }, { x: 332, y: GY - SPIKE_SZ }, { x: 364, y: GY - SPIKE_SZ },
+        { x: 500, y: GY - SPIKE_SZ }, { x: 532, y: GY - SPIKE_SZ }, { x: 564, y: GY - SPIKE_SZ },
+      ],
+      movingPlatforms: [],
+      coins: [{ id: 0, x: 100, y: 460 }, { id: 1, x: 700, y: 460 }],
+      exit: { x: 700, y: 422 }, spawns: [{ x: 50, y: 454 }, { x: 100, y: 454 }], totalKeys: 1,
+    },
+    {
+      name: '🚂 Moving Clouds',
+      hint: 'The platforms are moving! Jump carefully! ☁️',
+      sky: ['#CCEEFF', '#81D4FA'],
+      platforms: [{ x: 0, y: GY, w: CW, h: 50, isGround: true }, { x: 0, y: 400, w: 120, h: 16 }],
+      keys: [{ id: 0, x: 740, y: 180 }],
+      plates: [], barriers: [], spikes: [],
+      movingPlatforms: [
+        { x: 150, y: 320, w: 100, h: 16, x1: 150, x2: 450, y1: 320, y2: 320, speed: 2 },
+        { x: 500, y: 220, w: 100, h: 16, x1: 500, x2: 700, y1: 220, y2: 240, speed: 1.5 },
+      ],
+      coins: [{ id: 0, x: 300, y: 280 }, { id: 1, x: 600, y: 180 }],
+      exit: { x: 700, y: 422 }, spawns: [{ x: 50, y: 454 }, { x: 100, y: 454 }], totalKeys: 1,
+    },
+    {
+      name: '⛰️ The Great Divide',
+      hint: 'A huge gap! Use the moving platform to cross. 🕳️',
+      sky: ['#B39DDB', '#673AB7'],
+      platforms: [{ x: 0, y: GY, w: 200, h: 50, isGround: true }, { x: 600, y: GY, w: 200, h: 50, isGround: true }],
+      keys: [{ id: 0, x: 650, y: GY - 30 }],
+      plates: [], barriers: [], spikes: [{ x: 250, y: GY + 10 }, { x: 350, y: GY + 10 }, { x: 450, y: GY + 10 }],
+      movingPlatforms: [{ x: 220, y: 400, w: 80, h: 16, x1: 220, x2: 550, y1: 400, y2: 400, speed: 2.5 }],
+      coins: [{ id: 0, x: 380, y: 350 }],
+      exit: { x: 720, y: 422 }, spawns: [{ x: 50, y: 454 }, { x: 100, y: 454 }], totalKeys: 1,
+    },
+    {
+      name: '🏵️ Coordination Peak',
+      hint: 'One bear on the plate, the other grabs the key! 🤝',
+      sky: ['#FFF59D', '#FBC02D'],
+      platforms: [{ x: 0, y: GY, w: CW, h: 50, isGround: true }, { x: 500, y: 350, w: 200, h: 16 }],
+      keys: [{ id: 0, x: 700, y: 310 }],
+      plates: [{ id: 0, x: 100, y: GY, w: 60, h: 12, doorId: 0 }],
+      barriers: [{ id: 0, x: 480, y: 300, w: 20, h: 60 }],
+      spikes: [{ x: 300, y: GY - SPIKE_SZ }],
+      movingPlatforms: [{ x: 200, y: 350, w: 80, h: 16, x1: 200, x2: 400, y1: 350, y2: 250, speed: 2 }],
+      coins: [{ id: 0, x: 150, y: 300 }],
+      exit: { x: 720, y: 422 }, spawns: [{ x: 40, y: 454 }, { x: 80, y: 454 }], totalKeys: 1,
+    },
+    {
+      name: '🏁 Final Adventure!',
+      hint: 'The ultimate test! SPIKES, CLOUDS, and LOVE! 💖',
+      sky: ['#FF80AB', '#C2185B'],
+      platforms: [{ x: 0, y: GY, w: CW, h: 50, isGround: true }, { x: 100, y: 380, w: 100, h: 16 }, { x: 600, y: 380, w: 100, h: 16 }],
+      keys: [{ id: 0, x: 150, y: 340 }, { id: 1, x: 650, y: 340 }, { id: 2, x: 400, y: 150 }],
+      plates: [{ id: 0, x: 375, y: GY, w: 50, h: 12, doorId: 0 }],
+      barriers: [{ id: 0, x: 390, y: 250, w: 20, h: 100 }],
+      spikes: [{ x: 250, y: GY - SPIKE_SZ }, { x: 500, y: GY - SPIKE_SZ }],
+      movingPlatforms: [
+        { x: 350, y: 250, w: 100, h: 16, x1: 100, x2: 700, y1: 250, y2: 250, speed: 3 },
+      ],
+      coins: [{ id: 0, x: 400, y: 100 }, { id: 1, x: 400, y: 50 }],
+      exit: { x: 720, y: 422 }, spawns: [{ x: 50, y: 454 }, { x: 100, y: 454 }], totalKeys: 3,
+    }
   ];
 }
 
@@ -213,6 +284,7 @@ class Bear {
     this.onGround = false;
     this.facing = 1;
     this.character = character; // 'dudu' | 'bubu'
+    this.spawnX = x; this.spawnY = y;
     this.anim = 'idle';        // idle, walk, jump, land, celebrate
     this.frame = 0;
     this.landTmr = 0;
@@ -220,8 +292,18 @@ class Bear {
     this.jumped = false;
   }
 
-  update(input, platforms, barriers) {
+  update(input, platforms, barriers, spikes, mPlats) {
     this.jumped = false;
+    // Moving platforms horizontal shift if standing on one
+    let mx = 0;
+    for (const mp of mPlats) {
+      if (this.onGround && this.x + PW > mp.x && this.x < mp.x + mp.w && this.y + PH >= mp.y - 2 && this.y + PH <= mp.y + 10) {
+        mx = mp.vx || 0;
+        this.y = mp.y - PH;
+      }
+    }
+    this.x += mx;
+
     // Horizontal
     const moving = input.left || input.right;
     if (input.left) { this.vx = -WALK_SPD; this.facing = -1; }
@@ -273,6 +355,15 @@ class Bear {
     // Floor failsafe
     if (this.y + PH > CH) { this.y = CH - PH; this.vy = 0; this.onGround = true; }
 
+    // Spike collision
+    for (const s of spikes) {
+      const pad = 6;
+      if (this.x + PW > s.x + pad && this.x < s.x + SPIKE_SZ - pad &&
+        this.y + PH > s.y + pad && this.y < s.y + SPIKE_SZ - pad) {
+        this.reset();
+      }
+    }
+
     // Animation state
     if (this.celebTmr > 0) {
       this.anim = 'celebrate'; this.celebTmr--;
@@ -288,6 +379,14 @@ class Bear {
   }
 
   celebrate() { this.celebTmr = 150; this.anim = 'celebrate'; }
+
+  reset() {
+    this.x = this.spawnX;
+    this.y = this.spawnY;
+    this.vx = 0; this.vy = 0;
+    spawnPtcls(this.x + PW / 2, this.y + PH / 2, '#FF0000', 15, 'circle');
+    sfx(150, 0.2, 'sawtooth', 0.1);
+  }
 
   getState() {
     return {
@@ -305,140 +404,44 @@ class Bear {
 function drawBear(ctx, bear) {
   const { x, y, facing, anim, frame, character } = bear;
   const isDudu = character === 'dudu';
-
-  const BODY = isDudu ? '#8B5E3C' : '#F5F0E8';
-  const BELLY = isDudu ? '#C4956A' : '#FFE0E8';
-  const EAR_IN = isDudu ? '#D29060' : '#FFB6C1';
-  const LIMB = isDudu ? '#7A5032' : '#E0D8D0';
-  const OUTLINE = isDudu ? '#4A2E14' : '#B0A098';
-  const NOSE = isDudu ? '#3D1A00' : '#BB8090';
-  const BLUSH = '#FF9EB5';
+  const img = isDudu ? imgDudu : imgBubu;
 
   const cx = x + PW / 2, cy = y + PH / 2;
-
   ctx.save();
   ctx.translate(cx, cy);
 
-  // Squash & stretch
-  let sx = 1, sy = 1;
-  if (anim === 'land' && bear.landTmr > 5) { sx = 1.3; sy = 0.76; }
-  else if (anim === 'jump' && bear.vy < -6) { sx = 0.8; sy = 1.22; }
-  ctx.scale(facing * sx, sy);
-
-  // Walk bob
+  // Apply facing and bob
+  let sx = 0.55 * (isDudu ? 1.1 : 1), sy = 0.55 * (isDudu ? 1.1 : 1);
   const bob = anim === 'walk' ? Math.sin(frame * 0.4) * 2.5 : 0;
-  ctx.translate(0, bob);
 
-  const wk = anim === 'walk' ? Math.sin(frame * 0.35) : 0;
-  const jp = anim === 'jump' ? Math.min(1, -bear.vy / 13) : 0;
+  // Squash & stretch
+  if (anim === 'land' && bear.landTmr > 5) { sx *= 1.2; sy *= 0.8; }
+  else if (anim === 'jump' && bear.vy < -6) { sx *= 0.9; sy *= 1.1; }
 
-  // SHADOW
-  ctx.save(); ctx.scale(1, 0.25);
-  ctx.fillStyle = 'rgba(0,0,0,0.15)';
-  ctx.beginPath(); ctx.ellipse(0, PH * 0.5 + 22, 14, 8, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.restore();
+  ctx.scale(facing * sx, sy);
+  ctx.translate(0, bob / sy);
 
-  const lw = 1.8;
-
-  // TAIL
-  ctx.fillStyle = LIMB; ctx.strokeStyle = OUTLINE; ctx.lineWidth = lw;
-  ctx.beginPath(); ctx.arc(-15, 8, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-
-  // BODY
-  ctx.fillStyle = BODY; ctx.strokeStyle = OUTLINE; ctx.lineWidth = lw;
-  ctx.beginPath(); ctx.ellipse(0, 8, 15, 19, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-
-  // BELLY
-  ctx.fillStyle = BELLY;
-  ctx.beginPath(); ctx.ellipse(1, 11, 9, 13, 0, 0, Math.PI * 2); ctx.fill();
-
-  // DUDU chest heart
-  if (isDudu) {
-    ctx.fillStyle = '#FF9EB5'; ctx.globalAlpha = 0.8;
-    heartShape(ctx, 1, 5, 5); ctx.globalAlpha = 1;
+  if (img.complete) {
+    // Draw 3D Rendered Image
+    ctx.drawImage(img, -img.width / 2, -img.height / 2);
+  } else {
+    // Fallback to old drawing logic (simplified)
+    ctx.fillStyle = isDudu ? '#8B5E3C' : '#F5F0E8';
+    ctx.beginPath(); ctx.ellipse(0, 0, 15, 20, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(-5, -5, 2, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(5, -5, 2, 0, Math.PI * 2); ctx.fill();
   }
 
-  // LEFT ARM
-  ctx.fillStyle = LIMB; ctx.strokeStyle = OUTLINE; ctx.lineWidth = lw;
-  ctx.save(); ctx.translate(-14, 3); ctx.rotate(-wk * 0.45 - jp * 0.5);
-  ctx.beginPath(); ctx.ellipse(-2, 8, 5, 10, 0.18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.restore();
-
-  // RIGHT ARM
-  ctx.save(); ctx.translate(14, 3); ctx.rotate(wk * 0.45 + jp * 0.5);
-  ctx.beginPath(); ctx.ellipse(2, 8, 5, 10, -0.18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.restore();
-
-  // LEFT LEG
-  ctx.save(); ctx.translate(-7, 22); ctx.rotate(-wk * 0.38);
-  ctx.beginPath(); ctx.ellipse(0, 8, 5.5, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.restore();
-
-  // RIGHT LEG
-  ctx.save(); ctx.translate(7, 22); ctx.rotate(wk * 0.38);
-  ctx.beginPath(); ctx.ellipse(0, 8, 5.5, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.restore();
-
-  // EARS
-  [-11, 11].forEach(ex2 => {
-    ctx.fillStyle = BODY; ctx.strokeStyle = OUTLINE; ctx.lineWidth = lw;
-    ctx.beginPath(); ctx.arc(ex2, -23, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = EAR_IN;
-    ctx.beginPath(); ctx.arc(ex2, -23, 4.5, 0, Math.PI * 2); ctx.fill();
-  });
-
-  // HEAD
-  ctx.fillStyle = BODY; ctx.strokeStyle = OUTLINE; ctx.lineWidth = lw;
-  ctx.beginPath(); ctx.ellipse(1, -15, 15.5, 14.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-
-  // SNOUT
-  ctx.fillStyle = BELLY;
-  ctx.beginPath(); ctx.ellipse(4, -10, 7.5, 5.5, 0.1, 0, Math.PI * 2); ctx.fill();
-
-  // NOSE
-  ctx.fillStyle = NOSE;
-  ctx.beginPath(); ctx.ellipse(4, -13, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
-
-  // SMILE
-  ctx.strokeStyle = NOSE; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.arc(4, -8.5, 4, 0.1, Math.PI - 0.1); ctx.stroke();
-
-  // EYES
-  ctx.fillStyle = '#2A1500';
-  ctx.beginPath(); ctx.arc(-5, -18, 3, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(11, -18, 3, 0, Math.PI * 2); ctx.fill();
-  // Eye shines
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.arc(-3.8, -19.4, 1.2, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.arc(12.2, -19.4, 1.2, 0, Math.PI * 2); ctx.fill();
-
-  // BLUSH
-  ctx.fillStyle = BLUSH; ctx.globalAlpha = 0.55;
-  ctx.beginPath(); ctx.ellipse(-11, -14.5, 5.5, 3.2, -0.2, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(15, -14.5, 5.5, 3.2, 0.2, 0, Math.PI * 2); ctx.fill();
-  ctx.globalAlpha = 1;
-
-  // BUBU bow
-  if (!isDudu) {
-    ctx.fillStyle = '#FF7FAB'; ctx.strokeStyle = '#CC4070'; ctx.lineWidth = 1.2;
-    ctx.beginPath(); ctx.ellipse(-4, -31, 6.5, 3.5, -0.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(4, -31, 6.5, 3.5, 0.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#FFAEC8';
-    ctx.beginPath(); ctx.arc(0, -31, 3.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  }
-
-  // CELEBRATE heart
+  // Celebrate heart
   if (anim === 'celebrate') {
     const bz = Math.sin(frame * 0.15) * 5;
     ctx.fillStyle = '#FF4D88'; ctx.globalAlpha = 0.95;
     ctx.save();
-    ctx.translate(facing < 0 ? 12 : -12, -46 + bz);
-    ctx.scale(facing, 1);
+    ctx.translate(facing < 0 ? 12 : -12, -70 + bz);
+    ctx.scale(1 / sx, 1 / sy);
     heartShape(ctx, 0, 0, 13);
     ctx.restore();
-    ctx.globalAlpha = 1;
   }
-
   ctx.restore();
 }
 
@@ -450,21 +453,29 @@ function drawBg(ctx, lv, t) {
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, CW, CH);
 
-  // Decorative clouds
-  ctx.fillStyle = 'rgba(255,255,255,0.65)';
+  // Parallax stars/particles for 3D depth
+  for (let i = 0; i < 20; i++) {
+    const x = (Math.sin(i * 1234) * 0.5 + 0.5) * CW;
+    const y = ((t * (0.2 + (i % 5) * 0.1) + i * 50) % (CH + 100)) - 50;
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.beginPath(); ctx.arc(x, y, 1 + (i % 3), 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Decorative clouds with parallax
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
   [
-    { bx: 100, by: 70, bw: 65 },
-    { bx: 370, by: 50, bw: 55 },
-    { bx: 640, by: 85, bw: 70 },
-  ].forEach(({ bx, by, bw }) => {
-    const ox = ((t * 0.009 + bx * 0.001) % 1) * (CW + 200) - 100;
+    { bx: 100, by: 70, bw: 65, layer: 0.1 },
+    { bx: 370, by: 120, bw: 55, layer: 0.2 },
+    { bx: 640, by: 50, bw: 70, layer: 0.15 },
+  ].forEach(({ bx, by, bw, layer }) => {
+    const ox = ((t * 0.005 * layer + bx * 0.001) % 1) * (CW + 200) - 100;
     drawCloud(ctx, ox, by, bw);
   });
 
-  // Decorative trees (background)
+  // Decorative trees (far background)
   const treePositions = [40, 140, 260, 430, 570, 680, 750];
   treePositions.forEach((tx, i) => {
-    drawTree(ctx, tx, GY, 0.6 + i % 3 * 0.1, i % 2 === 0);
+    drawTree(ctx, tx, GY, 0.4 + i % 3 * 0.1, i % 2 === 0);
   });
 }
 
@@ -494,26 +505,51 @@ function drawTree(ctx, tx, ty, scale, dark) {
 }
 
 function drawPlatform(ctx, p) {
+  const depth = 12;
+  const sideCol = 'rgba(255,255,255,0.15)';
+  const topCol = 'rgba(255,255,255,0.25)';
+
   if (p.isGround) {
-    // Ground
-    ctx.fillStyle = '#4E7A3A'; ctx.fillRect(p.x, p.y, p.w, p.h);
-    ctx.fillStyle = '#6ABF46'; ctx.fillRect(p.x, p.y, p.w, 10);
-    // Grass tufts
-    ctx.fillStyle = '#4E9E32';
-    for (let gx = p.x + 15; gx < p.x + p.w - 10; gx += 28) {
-      ctx.beginPath(); ctx.moveTo(gx, p.y); ctx.lineTo(gx - 4, p.y - 8);
-      ctx.lineTo(gx, p.y - 4); ctx.lineTo(gx + 5, p.y - 9);
-      ctx.lineTo(gx + 10, p.y - 3); ctx.lineTo(gx + 12, p.y); ctx.fill();
-    }
+    // 3D Glass Ground
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fillRect(p.x, p.y + depth, p.w, p.h - depth);
+
+    // Top face
+    const g = ctx.createLinearGradient(p.x, p.y, p.x, p.y + depth);
+    g.addColorStop(0, 'rgba(255,255,255,0.3)'); g.addColorStop(1, 'rgba(255,255,255,0.05)');
+    ctx.fillStyle = g;
+    ctx.fillRect(p.x, p.y, p.w, depth);
+
+    // Glowing line
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + p.w, p.y); ctx.stroke();
   } else {
-    // Floating platform
-    const g = ctx.createLinearGradient(p.x, p.y, p.x, p.y + p.h);
-    g.addColorStop(0, '#7DCE58'); g.addColorStop(1, '#4E8C34');
-    ctx.fillStyle = g; ctx.strokeStyle = '#2E6020'; ctx.lineWidth = 2;
+    // 3D Glass Floating Platform
+    ctx.save();
+    // Shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 15; ctx.shadowOffsetY = 10;
+
+    // Main body
+    const grad = ctx.createLinearGradient(p.x, p.y, p.x, p.y + p.h);
+    grad.addColorStop(0, 'rgba(255,255,255,0.2)'); grad.addColorStop(1, 'rgba(255,255,255,0.05)');
+    ctx.fillStyle = grad;
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.roundRect(p.x, p.y, p.w, p.h, 8); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-    ctx.beginPath(); ctx.roundRect(p.x + 4, p.y + 3, p.w - 8, 5, 3); ctx.fill();
-    ctx.fillStyle = '#98DD72'; ctx.fillRect(p.x + 4, p.y, p.w - 8, 7);
+
+    // Top highlight (glass edge)
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.roundRect(p.x + 2, p.y + 1, p.w - 4, 4, 4); ctx.stroke();
+
+    // Side depth effect
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y + p.h);
+    ctx.lineTo(p.x + 8, p.y + p.h + 6);
+    ctx.lineTo(p.x + p.w + 8, p.y + p.h + 6);
+    ctx.lineTo(p.x + p.w, p.y + p.h);
+    ctx.closePath(); ctx.fill();
+
+    ctx.restore();
   }
 }
 
@@ -543,42 +579,41 @@ function drawKey(ctx, k, t) {
 
 function drawExit(ctx, exit, ready, t) {
   const ecx = exit.x + EXIT_W / 2, ecy = exit.y + EXIT_H / 2;
-  const pulse = Math.sin(t * 0.055) * 0.12 + 0.88;
+  const pulse = Math.sin(t * 0.055) * 0.08 + 0.92;
   ctx.save(); ctx.translate(ecx, ecy); ctx.scale(pulse, pulse); ctx.translate(-ecx, -ecy);
 
   if (!ready) {
-    ctx.strokeStyle = 'rgba(180,180,180,0.7)'; ctx.lineWidth = 4;
-    ctx.fillStyle = 'rgba(150,150,150,0.15)';
+    // 3D Glass Lock
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 4;
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
     ctx.beginPath(); ctx.ellipse(ecx, ecy, EXIT_W / 2, EXIT_H / 2, 0, 0, Math.PI * 2);
     ctx.fill(); ctx.stroke();
-    // Lock
-    ctx.fillStyle = 'rgba(180,180,180,0.7)';
-    ctx.beginPath(); ctx.roundRect(ecx - 11, ecy - 4, 22, 18, 4); ctx.fill();
-    ctx.strokeStyle = 'rgba(180,180,180,0.7)'; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.arc(ecx, ecy - 4, 8, Math.PI, 0); ctx.stroke();
+
+    // Lock icon
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.beginPath(); ctx.roundRect(ecx - 10, ecy - 5, 20, 15, 3); ctx.fill();
+    ctx.beginPath(); ctx.arc(ecx, ecy - 5, 7, Math.PI, 0); ctx.stroke();
   } else {
-    // Glow
-    const gg = ctx.createRadialGradient(ecx, ecy, 4, ecx, ecy, EXIT_W * 0.9);
-    gg.addColorStop(0, 'rgba(255,80,140,0.85)');
-    gg.addColorStop(0.5, 'rgba(255,140,190,0.4)');
-    gg.addColorStop(1, 'rgba(255,80,140,0)');
-    ctx.fillStyle = gg; ctx.beginPath(); ctx.ellipse(ecx, ecy, EXIT_W * 0.9, EXIT_H * 0.9, 0, 0, Math.PI * 2); ctx.fill();
-    // Ring
-    ctx.strokeStyle = '#FF4D88'; ctx.lineWidth = 4.5;
-    ctx.fillStyle = 'rgba(255,80,150,0.25)';
-    ctx.beginPath(); ctx.ellipse(ecx, ecy, EXIT_W / 2, EXIT_H / 2, 0, 0, Math.PI * 2);
-    ctx.fill(); ctx.stroke();
-    // Heart
-    ctx.fillStyle = '#FF4D88'; ctx.globalAlpha = 0.92;
-    heartShape(ctx, ecx, ecy, 20); ctx.globalAlpha = 1;
-    // Orbit sparkles
-    for (let i = 0; i < 7; i++) {
-      const a = t * 0.04 + i * Math.PI * 2 / 7;
-      const sx2 = ecx + Math.cos(a) * (EXIT_W / 2 + 10);
-      const sy2 = ecy + Math.sin(a) * (EXIT_H / 2 + 10);
-      ctx.fillStyle = '#FFD700';
-      starShape(ctx, sx2, sy2, 2.5, 5, 4);
+    // Glassy Portal
+    const gg = ctx.createRadialGradient(ecx, ecy, 5, ecx, ecy, EXIT_W);
+    gg.addColorStop(0, 'rgba(255,100,200,0.6)');
+    gg.addColorStop(0.7, 'rgba(255,150,250,0.2)');
+    gg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gg;
+    ctx.beginPath(); ctx.ellipse(ecx, ecy, EXIT_W * 0.9, EXIT_H * 0.9, 0, 0, Math.PI * 2); ctx.fill();
+
+    // Glowing Rings
+    for (let i = 0; i < 3; i++) {
+      const rr = (t * 0.5 + i * 20) % 40;
+      ctx.strokeStyle = `rgba(255,150,220,${1 - rr / 40})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.ellipse(ecx, ecy, (EXIT_W / 2) + rr, (EXIT_H / 2) + rr, 0, 0, Math.PI * 2); ctx.stroke();
     }
+
+    // Center Heart
+    ctx.fillStyle = '#FF4D88'; ctx.shadowColor = '#FF4D88'; ctx.shadowBlur = 20;
+    heartShape(ctx, ecx, ecy, 22);
+    ctx.shadowBlur = 0;
   }
   ctx.restore();
 }
@@ -611,6 +646,51 @@ function drawBarrier(ctx, b) {
   }
 }
 
+function drawSpike(ctx, s) {
+  const sz = SPIKE_SZ;
+  ctx.save();
+  // 3D Metal Spike
+  const gd = ctx.createLinearGradient(s.x, s.y, s.x + sz, s.y + sz);
+  gd.addColorStop(0, '#B0BEC5'); gd.addColorStop(0.5, '#455A64'); gd.addColorStop(1, '#263238');
+  ctx.fillStyle = gd;
+  ctx.beginPath();
+  ctx.moveTo(s.x, s.y + sz);
+  ctx.lineTo(s.x + sz / 2, s.y);
+  ctx.lineTo(s.x + sz, s.y + sz);
+  ctx.fill();
+
+  // Highlight
+  ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(s.x + sz / 2, s.y); ctx.lineTo(s.x + sz, s.y + sz); ctx.stroke();
+  ctx.restore();
+}
+
+function drawCoin(ctx, c, t) {
+  if (c.collected) return;
+  const bob = Math.sin(t * 0.1) * 3;
+  const rot = t * 0.12;
+  const cx = c.x + COIN_SZ / 2, cy = c.y + COIN_SZ / 2 + bob;
+  const width = Math.cos(rot) * COIN_SZ;
+
+  ctx.save(); ctx.translate(cx, cy);
+  // Glow
+  const gl = ctx.createRadialGradient(0, 0, 0, 0, 0, 20);
+  gl.addColorStop(0, 'rgba(255,215,0,0.4)'); gl.addColorStop(1, 'rgba(255,215,0,0)');
+  ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2); ctx.fill();
+
+  // 3D Rotating Coin
+  ctx.fillStyle = '#FFD700'; ctx.strokeStyle = '#B8860B'; ctx.lineWidth = 2;
+  if (Math.abs(width) > 2) {
+    ctx.beginPath(); ctx.ellipse(0, 0, Math.abs(width) / 2, COIN_SZ / 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // Inner ring
+    ctx.beginPath(); ctx.ellipse(0, 0, Math.abs(width) / 4, COIN_SZ / 3, 0, 0, Math.PI * 2); ctx.stroke();
+  } else {
+    // Edge of the coin
+    ctx.fillRect(-1, -COIN_SZ / 2, 2, COIN_SZ);
+  }
+  ctx.restore();
+}
+
 // ── HUD ────────────────────────────────────────────────────────
 function drawHUD(ctx, lv, collected, total) {
   ctx.fillStyle = 'rgba(0,0,0,0.38)';
@@ -625,7 +705,11 @@ function drawHUD(ctx, lv, collected, total) {
   // Key count
   ctx.font = 'bold 13px Nunito,sans-serif';
   ctx.fillStyle = collected >= total ? '#7FFF00' : '#FFD700';
-  ctx.fillText(`🔑 ${collected} / ${total}`, CW / 2, 13);
+  ctx.fillText(`🔑 ${collected} / ${total}`, CW / 2 - 40, 13);
+
+  // Coin count
+  ctx.fillStyle = '#FFD700';
+  ctx.fillText(`🪙 ${coinsGot.size} / ${totalCoins}`, CW / 2 + 40, 13);
 
   // P1 label
   ctx.textAlign = 'left';
@@ -683,15 +767,27 @@ let lv = null;
 let localBear = null;
 let remoteBear = null;
 let keysGot = new Set();
+let coinsGot = new Set();
+let totalCoins = 0;
 let barriers = [];
 let plates = [];
+let spikes = [];
+let mPlats = [];
 let t = 0;
+
+// ── Images ─────────────────────────────────────────────────────
+const imgDudu = new Image(); imgDudu.src = 'dudu_3d.png';
+const imgBubu = new Image(); imgBubu.src = 'bubu_3d.png';
 
 function loadLevel(index) {
   lv = JSON.parse(JSON.stringify(levels[index]));
   keysGot.clear();
+  coinsGot.clear();
   barriers = lv.barriers.map(b => ({ ...b, open: false }));
   plates = lv.plates.map(p => ({ ...p, active: false }));
+  spikes = lv.spikes || [];
+  mPlats = (lv.movingPlatforms || []).map(p => ({ ...p, tx: 0, ty: 0, vx: 0, vy: 0 }));
+  totalCoins = (lv.coins || []).length;
 
   const s0 = lv.spawns[0], s1 = lv.spawns[1];
   if (localPIdx === 0) {
@@ -704,6 +800,18 @@ function loadLevel(index) {
 
   document.getElementById('hint-bar').textContent = lv.hint || '';
 }
+
+window.onRemoteCoin = (id) => {
+  if (lv && lv.coins) {
+    const c = lv.coins.find(item => item.id === id);
+    if (c && !c.collected) {
+      c.collected = true;
+      coinsGot.add(id);
+      spawnStars(c.x + COIN_SZ / 2, c.y + COIN_SZ / 2, 8);
+      playCollect();
+    }
+  }
+};
 
 // ── Input ──────────────────────────────────────────────────────
 const KS = {};
@@ -749,17 +857,7 @@ function triggerLvComplete() {
   for (let i = 0; i < 40; i++) spawnPtcls(CW / 2, CH / 2, `hsl(${Math.random() * 360},90%,65%)`, 1, 'circle');
   playLevel();
   if (window.NET_nextLevel) window.NET_nextLevel(lvIdx + 1);
-  setTimeout(() => {
-    lvCompTmr = 0;
-    lvIdx++;
-    if (lvIdx >= levels.length) {
-      scene = 'gamecomplete';
-      showScene('gamecomplete');
-      playVictory();
-    } else {
-      loadLevel(lvIdx);
-    }
-  }, 3200);
+  // Redundant local loadLevel removed; we wait for onLoadLevel from socket.
 }
 
 function drawLvComplete(ctx) {
@@ -794,22 +892,49 @@ function loop() {
 
   ctx.clearRect(0, 0, CW, CH);
   drawBg(ctx, lv, t);
+
+  // Update moving platforms
+  for (const mp of mPlats) {
+    const dist = Math.sqrt((mp.x2 - mp.x1) ** 2 + (mp.y2 - mp.y1) ** 2);
+    if (dist > 0) {
+      const cycle = dist * 2 / mp.speed;
+      const progress = (t % cycle) / cycle;
+      const f = progress < 0.5 ? progress * 2 : (1 - progress) * 2;
+      const oldX = mp.x;
+      mp.x = mp.x1 + (mp.x2 - mp.x1) * f;
+      mp.y = mp.y1 + (mp.y2 - mp.y1) * f;
+      mp.vx = mp.x - oldX;
+    }
+  }
+
   lv.platforms.forEach(p => drawPlatform(ctx, p));
+  mPlats.forEach(p => drawPlatform(ctx, p));
   barriers.forEach(b => drawBarrier(ctx, b));
   plates.forEach(p => drawPlate(ctx, p));
+  spikes.forEach(s => drawSpike(ctx, s));
   lv.keys.forEach(k => drawKey(ctx, k, t));
+  (lv.coins || []).forEach(c => drawCoin(ctx, c, t));
 
   const allKeys = keysGot.size >= lv.totalKeys;
   drawExit(ctx, lv.exit, allKeys, t);
 
   // Update local bear
-  const inp = getInput();
-  const wasGround = localBear.onGround;
-  localBear.update(inp, lv.platforms, allKeys ? [] : barriers);
-  if (!wasGround && localBear.onGround && localBear.vy >= 0) {
-    // landed
-  }
+  const lastGround = localBear.onGround;
+  localBear.update(getInput(), [...lv.platforms, ...mPlats], allKeys ? [] : barriers, spikes, mPlats);
+  if (!lastGround && localBear.onGround && localBear.vy >= 0) { /* landed */ }
   if (localBear.jumped) playJump();
+
+  // Draw bears
+  const dudu = localPIdx === 0 ? localBear : remoteBear;
+  const bubu = localPIdx === 1 ? localBear : remoteBear;
+  if (dudu) drawBear(ctx, dudu);
+  if (bubu) drawBear(ctx, bubu);
+
+  tickPtcls();
+  drawPtcls(ctx);
+  // Add coin count to HUD or separate display
+  drawHUD(ctx, lv, keysGot.size, lv.totalKeys);
+  if (lvCompTmr > 0) { lvCompTmr--; drawLvComplete(ctx); }
 
   // Pressure plates
   plates.forEach(plate => {
@@ -832,6 +957,21 @@ function loop() {
     }
   });
 
+  // Coin collection
+  (lv.coins || []).forEach(c => {
+    if (!c.collected) {
+      const bx = localBear.x + PW / 2, by = localBear.y + PH / 2;
+      const cx = c.x + COIN_SZ / 2, cy = c.y + COIN_SZ / 2;
+      if (Math.hypot(bx - cx, by - cy) < 25) {
+        c.collected = true;
+        coinsGot.add(c.id);
+        spawnStars(cx, cy, 12);
+        playCollect();
+        if (window.NET_coin) window.NET_coin(c.id);
+      }
+    }
+  });
+
   // Check level complete
   if (allKeys && lvCompTmr === 0 && bearInExit(localBear) && remoteBear && bearInExit(remoteBear)) {
     triggerLvComplete();
@@ -839,16 +979,6 @@ function loop() {
 
   // Send network state
   if (window.NET_state) window.NET_state(localBear.getState());
-
-  // Draw bears (Dudu=brown, Bubu=white)
-  const dudu = localPIdx === 0 ? localBear : remoteBear;
-  const bubu = localPIdx === 1 ? localBear : remoteBear;
-  if (dudu) drawBear(ctx, dudu);
-  if (bubu) drawBear(ctx, bubu);
-
-  tickPtcls(); drawPtcls(ctx);
-  drawHUD(ctx, lv, keysGot.size, lv.totalKeys);
-  if (lvCompTmr > 0) { lvCompTmr--; drawLvComplete(ctx); }
 }
 
 // ── Network callbacks (called by network.js) ────────────────────
@@ -872,12 +1002,21 @@ window.onRemotePlate = (data) => {
   }
 };
 window.onLoadLevel = (idx) => {
-  lvIdx = idx; loadLevel(idx); lvCompTmr = 0;
+  if (idx >= levels.length) {
+    scene = 'gamecomplete';
+    showScene('gamecomplete');
+    playVictory();
+  } else {
+    lvIdx = idx;
+    loadLevel(idx);
+    lvCompTmr = 0;
+  }
 };
-window.onBothReady = (pIdx) => {
+window.onBothReady = (pIdx, startLevel) => {
   localPIdx = pIdx;
+  lvIdx = startLevel;
   showScene('game');
-  loadLevel(0);
+  loadLevel(lvIdx);
   scene = 'playing';
 };
 window.onPartnerLeft = () => {
@@ -885,5 +1024,5 @@ window.onPartnerLeft = () => {
   location.reload();
 };
 
-// Start loop (only draws when scene==='playing')
+// Start loop
 requestAnimationFrame(loop);
