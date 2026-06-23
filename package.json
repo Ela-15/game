@@ -1,0 +1,14 @@
+{
+  "name": "dudu-bubu-adventure",
+  "version": "1.0.0",
+  "description": "Dudu & Bubu - A couple bear cooperative Pico Park style adventure",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}

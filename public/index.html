@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dudu & Bubu — Bear Couple Adventure 🐻💕</title>
+  <meta name="description" content="A cute cooperative adventure game for two players featuring Dudu the brown bear and Bubu the white bear — a couple on a journey together!"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ════════ LOBBY SCENE ════════ -->
+<div id="scene-lobby" class="scene active">
+  <div class="lobby-bg">
+    <div class="bear-deco bear-left">🐻</div>
+    <div class="bear-deco bear-right">🐻</div>
+    <div class="hearts-bg">
+      <span>💕</span><span>💕</span><span>💕</span><span>💕</span><span>💕</span>
+      <span>💕</span><span>💕</span><span>💕</span><span>💕</span><span>💕</span>
+    </div>
+  </div>
+  <div class="lobby-card">
+    <div class="logo">
+      <span class="bear-icon brown">🐻</span>
+      <div class="title-block">
+        <h1>Dudu &amp; Bubu</h1>
+        <p class="subtitle">A Bear Couple Adventure 💕</p>
+      </div>
+      <span class="bear-icon white">🐻</span>
+    </div>
+    <div class="lobby-desc">
+      <p>Work together, collect keys 🔑, solve puzzles and reach the <strong>Heart Portal 💖</strong> — <em>together</em>!</p>
+    </div>
+    <div class="lobby-panels">
+      <div class="panel" id="panel-create">
+        <h2>🎮 Create Game</h2>
+        <p class="panel-sub">You play as <strong>Dudu</strong> 🐻 (brown bear)</p>
+        <p class="panel-sub">Controls: <kbd>W A S D</kbd> + <kbd>Space</kbd></p>
+        <button id="btn-create" class="btn btn-primary">Create Room</button>
+      </div>
+      <div class="divider">OR</div>
+      <div class="panel" id="panel-join">
+        <h2>🌐 Join Game</h2>
+        <p class="panel-sub">You play as <strong>Bubu</strong> 🐻 (white bear)</p>
+        <p class="panel-sub">Controls: <kbd>← ↑ → ↓</kbd> + <kbd>Enter</kbd></p>
+        <input id="room-code-input" type="text" maxlength="4" placeholder="Enter code (e.g. AB12)" autocomplete="off"/>
+        <button id="btn-join" class="btn btn-secondary">Join Room</button>
+        <p id="join-error" class="error-msg"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ WAITING SCENE ════════ -->
+<div id="scene-waiting" class="scene">
+  <div class="center-card">
+    <div class="waiting-bears">
+      <span class="big-bear animate-bounce">🐻</span>
+      <span class="wait-hearts">💕</span>
+      <span class="big-bear animate-bounce delay">🐻</span>
+    </div>
+    <h2>Room Created!</h2>
+    <p>Share this code with your partner:</p>
+    <div class="room-code-display" id="room-code-show">????</div>
+    <p class="waiting-text">⏳ Waiting for <strong>Bubu</strong> to join...</p>
+    <p class="small-hint">Make sure you're on the same network, or share the server's LAN IP</p>
+  </div>
+</div>
+
+<!-- ════════ GAME SCENE ════════ -->
+<div id="scene-game" class="scene">
+  <div class="game-wrapper">
+    <canvas id="gameCanvas" width="800" height="550"></canvas>
+    <div id="hint-bar" class="hint-bar"></div>
+  </div>
+</div>
+
+<!-- ════════ GAME COMPLETE SCENE ════════ -->
+<div id="scene-gamecomplete" class="scene">
+  <div class="center-card victory">
+    <div class="victory-bears">
+      <span class="big-bear animate-bounce">🐻</span>
+      <span style="font-size:3rem">💕</span>
+      <span class="big-bear animate-bounce delay">🐻</span>
+    </div>
+    <h2 class="victory-title">You Did It Together! 💖</h2>
+    <p>Dudu &amp; Bubu's adventure is complete!</p>
+    <p class="love-msg">❝ Love conquers all levels ❞</p>
+    <button id="btn-restart" class="btn btn-primary" onclick="location.reload()">Play Again 🔄</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="network.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
