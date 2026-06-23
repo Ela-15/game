@@ -4,6 +4,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 const socket = io();
+let _myPlayerIndex = 0;
 
 // ── Lobby UI ───────────────────────────────────────────────────
 document.getElementById('btn-create').addEventListener('click', () => {
@@ -17,18 +18,21 @@ document.getElementById('btn-join').addEventListener('click', () => {
     showError('Please enter a valid 4-letter room code!');
     return;
   }
+
+  console.log(`[NETWORK] 📡 Sending joinRoom for code: ${code}`);
   document.getElementById('btn-join').disabled = true;
   document.getElementById('btn-join').textContent = 'Joining...';
   socket.emit('joinRoom', code);
 
-  // Auto-reset if no response in 5s
+  // Auto-reset if no response in 10s
   setTimeout(() => {
     if (document.getElementById('btn-join').disabled && document.getElementById('btn-join').textContent === 'Joining...') {
       document.getElementById('btn-join').disabled = false;
       document.getElementById('btn-join').textContent = 'Join Room';
-      showError('Connection timed out. Try again!');
+      showError('Connection timed out. Please check the code or your network.');
+      console.warn('[NETWORK] ⏰ Join timeout reached.');
     }
-  }, 5000);
+  }, 10000);
 });
 
 document.getElementById('room-code-input').addEventListener('keydown', e => {
@@ -37,10 +41,11 @@ document.getElementById('room-code-input').addEventListener('keydown', e => {
 
 function showError(msg) {
   const el = document.getElementById('join-error');
+  if (!el) return;
   el.textContent = msg;
   el.style.animation = 'none';
   requestAnimationFrame(() => { el.style.animation = ''; });
-  setTimeout(() => { el.textContent = ''; }, 4000);
+  setTimeout(() => { el.textContent = ''; }, 5000);
 }
 
 function showScene(name) {
@@ -49,19 +54,33 @@ function showScene(name) {
   if (el) el.classList.add('active');
 }
 
+// Make showScene available globally for game3d.js
+window.showScene = showScene;
+
 // ── Socket Events ──────────────────────────────────────────────
+socket.on('connect', () => {
+  console.log('🌐 [NETWORK] Connected to server:', socket.id);
+});
+
+socket.on('connect_error', (error) => {
+  console.error('🌐 [NETWORK] Connection error:', error);
+  showError('Lost connection to server. Retrying...');
+});
+
 socket.on('roomCreated', ({ code, playerIndex }) => {
   _myPlayerIndex = playerIndex;
   document.getElementById('room-code-show').textContent = code;
   showScene('waiting');
-  console.log(`Room created: ${code}, you are Player ${playerIndex + 1}`);
+  console.log(`[NETWORK] 🏠 Room created: ${code}, you are Player ${playerIndex + 1}`);
 });
 
 socket.on('roomJoined', ({ code, playerIndex }) => {
-  console.log(`Joined room: ${code}, you are Player ${playerIndex + 1} (Bubu 🐻 white)`);
+  _myPlayerIndex = playerIndex;
+  console.log(`[NETWORK] 🤝 Joined room: ${code}, you are Player ${playerIndex + 1}`);
 });
 
 socket.on('joinError', (msg) => {
+  console.warn(`[NETWORK] ❌ Join error: ${msg}`);
   document.getElementById('btn-join').disabled = false;
   document.getElementById('btn-join').textContent = 'Join Room';
   showError(msg);
@@ -109,21 +128,11 @@ socket.on('partnerLeft', () => {
   if (window.onPartnerLeft) window.onPartnerLeft();
 });
 
-socket.on('connect', () => {
-  console.log('🌐 Connected to server:', socket.id);
-});
-
 socket.on('disconnect', () => {
   console.warn('Disconnected from server');
 });
 
-// ── Track local player index ───────────────────────────────────
-let _myPlayerIndex = 0;
-
-socket.on('roomCreated', ({ playerIndex }) => { _myPlayerIndex = playerIndex; });
-socket.on('roomJoined', ({ playerIndex }) => { _myPlayerIndex = playerIndex; });
-
-// ── Send helpers (called by game.js) ───────────────────────────
+// ── Send helpers (called by game3d.js) ───────────────────────────
 
 // Send local bear state every frame
 let _stateTick = 0;

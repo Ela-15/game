@@ -32,21 +32,37 @@ io.on('connection', (socket) => {
     socket.playerIndex = 0;
     socket.join(code);
     socket.emit('roomCreated', { code, playerIndex: 0 });
-    console.log(`Room ${code} created`);
+    console.log(`[SERVER] 🏠 Room ${code} created by ${socket.id}`);
   });
 
   socket.on('joinRoom', (code) => {
+    console.log(`[SERVER] 📥 Join attempt for code: ${code} by ${socket.id}`);
     code = (code || '').toUpperCase().trim();
     const room = rooms[code];
-    if (!room) { socket.emit('joinError', 'Room not found! Check the code.'); return; }
-    if (room.players.length >= 2) { socket.emit('joinError', 'Room is full!'); return; }
+
+    if (!room) {
+      console.warn(`[SERVER] ❌ Room ${code} not found!`);
+      socket.emit('joinError', 'Room not found! Check the code.');
+      return;
+    }
+    if (room.players.length >= 2) {
+      console.warn(`[SERVER] ❌ Room ${code} is full!`);
+      socket.emit('joinError', 'Room is full!');
+      return;
+    }
+
     room.players.push(socket.id);
     socket.roomCode = code;
     socket.playerIndex = 1;
-    socket.join(code);
+
+    socket.join(code); // Ensure joined bits before emitting
     socket.emit('roomJoined', { code, playerIndex: 1 });
-    io.to(code).emit('bothReady', { level: room.state.level });
-    console.log(`Player 2 joined room ${code}`);
+
+    // Give a small delay to ensure client is ready for bothReady
+    setTimeout(() => {
+      io.to(code).emit('bothReady', { level: room.state.level });
+      console.log(`[SERVER] 🤝 Player 2 (${socket.id}) joined room ${code}. Game starting!`);
+    }, 100);
   });
 
   socket.on('playerState', (state) => {

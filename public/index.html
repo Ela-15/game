@@ -10,6 +10,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Import map so Three.js ES module imports resolve from CDN -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 
 <body>
@@ -79,7 +89,7 @@
   <div id="scene-game" class="scene">
     <div class="game-wrapper">
       <div id="three-container"
-        style="width: 800px; height: 500px; border-radius: 18px; margin: 0 auto; box-shadow: 0 24px 80px rgba(0,0,0,0.5);">
+        style="width: 800px; height: 500px; border-radius: 18px; margin: 0 auto; box-shadow: 0 24px 80px rgba(0,0,0,0.5); overflow: hidden;">
       </div>
       <div id="hint-bar" class="hint-bar"></div>
     </div>
@@ -101,7 +111,7 @@
   </div>
 
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <script type="module" src="network.js"></script>
+  <script src="network.js"></script>
   <script type="module" src="game3d.js"></script>
 </body>
 
