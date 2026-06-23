@@ -452,11 +452,13 @@ function getInput() {
 
 // ── Network Integration ────────────────────────────────────────
 window.onBothReady = (pIdx, startLevel) => {
+    if (gameState !== 'lobby') return;
     localPIdx = pIdx;
     lvIdx = startLevel;
     document.getElementById('scene-lobby').classList.remove('active');
     document.getElementById('scene-game').classList.add('active');
     document.getElementById('three-container').classList.add('active');
+
     init3D();
     gameState = 'playing';
 };

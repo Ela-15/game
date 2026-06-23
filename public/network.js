@@ -22,6 +22,15 @@ document.getElementById('btn-join').addEventListener('click', () => {
   document.getElementById('btn-join').disabled = true;
   document.getElementById('btn-join').textContent = 'Joining...';
   socket.emit('joinRoom', code);
+
+  // Auto-reset if no response in 5s
+  setTimeout(() => {
+    if (document.getElementById('btn-join').disabled && document.getElementById('btn-join').textContent === 'Joining...') {
+      document.getElementById('btn-join').disabled = false;
+      document.getElementById('btn-join').textContent = 'Join Room';
+      showError('Connection timed out. Try again!');
+    }
+  }, 5000);
 });
 
 document.getElementById('room-code-input').addEventListener('keydown', e => {
